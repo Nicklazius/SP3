@@ -1,0 +1,47 @@
+@startuml
+'https://plantuml.com/object-diagram
+
+object Main
+object HomePage
+object Bruger
+object Film
+object Serier
+object Startmenu
+object Kategorier
+object Login
+object Opretbruger
+object Rating
+object Søgefelt
+object History
+object Logout
+object HomeMenu
+
+HomePage *-- Bruger
+HomePage *-- Søgefelt
+HomePage *-- Logout
+HomePage *-- HomeMenu
+
+HomeMenu *-- Film
+HomeMenu *-- Serier
+
+Startmenu *-- Login
+Startmenu *-- Opretbruger
+
+Main *-- Startmenu
+
+Film *-- Rating
+Film *-- Kategorier
+
+Serier *-- Rating
+Serier *-- Kategorier
+
+Bruger *-- History
+
+History *-- Film
+History *-- Serier
+
+Søgefelt *-- Kategorier
+Søgefelt *-- Film
+Søgefelt *-- Serier
+
+@enduml
