@@ -1,0 +1,84 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class Main {
++ static void main(String[] args)
+
+}
+
+class LogIn {
+
+}
+
+class SignUp {
++ void createProfil()
+}
+
+class Movies {
+
+}
+
+class Series {
+
+}
+
+class Profil {
++ void history()
+}
+
+class StreamingService {
++ void logIn()
++ void signIn()
+}
+
+class Search {
+- Title
+- Year
+- Rating
+- Categories
+}
+
+class AdvancedSearch {
++ void genre()
++ void top10Movies()
++ void top10Series()
+}
+
+package "util" {
+class TextUI {
+- Scanner scan
++ boolean promptBinary(String msg)
++ String promptText(String msg)
++ int promptNumeric(String msg)
++ ArrayList<String> promptChoice(ArrayList<String> options, int limit, String msg)
++ void displayMessage(String msg)
++ void displayList(ArrayList<String> list, String msg)
+}
+
+class FileIO{
++ void saveData(ArrayList<String> data, String path, String header)
++ ArrayList<String> readData(String path)
++ String[] readData(String path, int length)
+}
+
+
+Main *-- StreamingService
+
+StreamingService *-- LogIn
+StreamingService *-- SignUp
+StreamingService *-- Profil
+StreamingService *-- TextUI
+StreamingService *-- FileIO
+
+StreamingService *-- Search
+StreamingService *-- AdvancedSearch
+
+Search *-- Movies
+Search *-- Series
+
+AdvancedSearch *-- Movies
+AdvancedSearch *-- Series
+
+Profil *-- Movies
+Profil *-- Series
+@enduml

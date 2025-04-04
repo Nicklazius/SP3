@@ -1,0 +1,70 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+Main *-- StartMenu
+
+StartMenu *-- LogIn
+StartMenu *-- SignUp
+
+LogIn *-- SignUp
+LogIn *-- Profil
+
+Profil *-- HomePage
+
+HomePage *-- Search
+HomePage *-- AdvancedSearch
+
+Search *-- Movies
+Search *-- Series
+
+AdvancedSearch *-- Movies
+AdvancedSearch *-- Series
+
+
+class Main {
+
+}
+
+class LogIn {
+
+}
+
+class SignUp {
++ void createProfil()
+}
+
+class Movies {
+
+}
+
+class Series {
+
+}
+
+class Profil {
++ void history()
+}
+
+class StartMenu {
++ void logIn()
++ void signIn()
+}
+
+class HomePage {
++ void selection()
+}
+
+class Search {
+- Title
+- Year
+- Rating
+- Categories
+}
+
+class AdvancedSearch {
++ void genre()
++ void top10Movies()
++ void top10Series()
+}
+
+@enduml

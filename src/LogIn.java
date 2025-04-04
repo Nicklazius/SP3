@@ -12,7 +12,7 @@ public class LogIn {
         System.out.print("Indtast kodeord: ");
         String password = input.nextLine();
 
-// antager at deres login info er korrekt
+    // antager at deres login info er korrekt
         System.out.println("Du er nu logget ind som " + username + "!");
 
         // Vi sender kunden til homepage
