@@ -1,3 +1,4 @@
+/*
 import java.util.Scanner;
 
 public class StartMenu {
@@ -30,3 +31,4 @@ public class StartMenu {
         input.close(); // Vi lukker scanneren for at frigive ressourcer
     }
 }
+*/

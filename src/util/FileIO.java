@@ -29,7 +29,7 @@ public class FileIO {
             Scanner scan = new Scanner(file);
             scan.nextLine();//skip header;
             while (scan.hasNextLine()) {
-                String line = scan.nextLine();   //  "tess, 0"
+                String line = scan.nextLine();  
                 data.add(line);
             }
         } catch (FileNotFoundException e) {

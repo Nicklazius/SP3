@@ -1,15 +1,15 @@
 import java.util.ArrayList;
 
 // En abstrakt klasse, som er en "grundform" for medier som film eller serier
-public abstract class Media {
+public class Movie {
     // Egenskaber (variabler)
     protected String title;
     protected String yearReleased;
     protected double rating;
     protected ArrayList<String> categories;
 
-    // Konstruktor – det der sker, når vi laver et nyt Media-objekt
-    public Media(String title, String yearReleased, ArrayList<String> categories, double rating) {
+    // Konstruktor – det der sker, når vi laver et nyt src.Media-objekt
+    public Movie(String title, String yearReleased, ArrayList<String> categories, double rating) {
         this.title = title;
         this.yearReleased = yearReleased;
         this.categories = categories;
@@ -34,7 +34,11 @@ public abstract class Media {
     }
 
     // "Play" og "Stop" er metoder som vi bare skriver, men ikke udfylder endnu
-    public abstract void play();
+    public void play(){
 
-    public abstract void stop();
+    }
+
+    public void stop(){
+
+    }
 }
