@@ -36,6 +36,7 @@ public class StreamingService {
 
             registerUser();
         }
+        readMedia();
     }
 
     public void endSession() {
@@ -57,7 +58,7 @@ public class StreamingService {
         String accName = ui.promptText("Vælg et brugernavn: ");
         String accPassword = ui.promptText("Vælg et kodeord: ");
         this.createAccount(accName, accPassword);
-        ui.promptText("Bruger oprettet! Du er nu logget ind som " + accName + ".");
+        ui.displayMessage("Bruger oprettet! Du er nu logget ind som " + accName + ".");
         // Vi sender brugeren til homepage
         // HovedMenu.menu();
     }
@@ -70,6 +71,7 @@ public class StreamingService {
 
     public void readMedia(){
 
-
+        ArrayList<String> readMovies = io.readData("data/Movies.csv");
+        ArrayList<String> readSeries = io.readData("data/Series.csv");
     }
 }

@@ -12,7 +12,6 @@ public class Movie extends Media {
         this.rating = rating;
     }
 
-    // Metoder – som giver adgang til informationer om objektet
     public String getTitle() {
         return title;
     }

@@ -6,7 +6,6 @@ public class Media {
     protected String title;
     protected int year;
     protected double rating;
-    protected String[] categories = {"Movies","Series","Search"};
     protected String runTime;
     protected int season;
     protected int episode;
