@@ -1,18 +1,14 @@
 import java.util.ArrayList;
 
 // En abstrakt klasse, som er en "grundform" for medier som film eller serier
-public class Movie {
-    // Egenskaber (variabler)
-    protected String title;
-    protected String yearReleased;
-    protected double rating;
-    protected ArrayList<String> categories;
+public class Movie extends Media {
 
     // Konstruktor – det der sker, når vi laver et nyt src.Media-objekt
-    public Movie(String title, String yearReleased, ArrayList<String> categories, double rating) {
+    public Movie(String title, int year, String[] genre, double rating) {
+
         this.title = title;
-        this.yearReleased = yearReleased;
-        this.categories = categories;
+        this.year = year;
+        this.genre = genre;
         this.rating = rating;
     }
 
@@ -21,15 +17,15 @@ public class Movie {
         return title;
     }
 
-    public String getYearReleased() {
-        return yearReleased;
+    public int getYear() {
+        return year;
     }
 
     public double getRating() {
         return rating;
     }
 
-    public ArrayList<String> getCategories() {
+    public String[] getCategories() {
         return categories;
     }
 

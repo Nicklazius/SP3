@@ -68,7 +68,7 @@ public class StreamingService {
         account.add(acc);
     }
 
-    public void currentUser() {
+    public void readMedia(){
 
 
     }
