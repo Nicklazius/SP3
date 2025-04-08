@@ -38,6 +38,14 @@ public class StreamingService {
         }
     }
 
+    public void runStreamingService() {
+
+        Search search = new Search();
+        search.readMovie();
+        search.readSeries();
+        search.searchMenu();
+    }
+
     public void endSession() {
         ArrayList<String> User = new ArrayList<>();
 
@@ -61,7 +69,7 @@ public class StreamingService {
 
     public void createAccount(String accountName, String password) {
 
-        Account acc = new Account(accountName,password);
+        Account acc = new Account(accountName, password);
         account.add(acc);
     }
 }

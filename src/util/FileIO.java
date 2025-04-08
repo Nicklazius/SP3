@@ -47,7 +47,7 @@ public class FileIO {
 
             int i = 0;  //counter
             while (scan.hasNextLine()) {
-                String line = scan.nextLine();  //String line bliver instansieret som det scaneren har læst
+                String line = scan.nextLine();   //String line bliver instansieret som det scaneren har læst
                 data[i]=line;                    //information tilføjes til et array
                 i++;                             //counter går op
            }

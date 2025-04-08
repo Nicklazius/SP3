@@ -37,20 +37,4 @@ public class Movie extends Media {
     public void stop() {
 
     }
-
-    public void readMovie() {
-
-        FileIO io = new FileIO();
-        ArrayList<String> moviesList = io.readData("data/movies.csv");
-
-        if (!moviesList.isEmpty()) {
-            for (String s : moviesList) {
-                String[] values = s.split(";");
-                int year = Integer.parseInt(values[1]);
-                String[] genre = values[2].split(",".trim());
-                double rating = Double.parseDouble(values[3]);
-                Movie movie = new Movie(values[0], year, genre, rating);
-            }
-        }
-    }
 }

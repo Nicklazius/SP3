@@ -1,15 +1,18 @@
+import util.FileIO;
 import util.TextUI;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
 
 public class Search {
     TextUI ui = new TextUI();
+    FileIO io = new FileIO();
 
-    private String[] categories = {"Title Search", "Movies", "Series", "Genres", "Top10 Series", "Top10 Movies"};
     private ArrayList<String[]> moviesList = new ArrayList<>();
     private ArrayList<String[]> seriesList = new ArrayList<>();
-    private String title;
+    private ArrayList<String> moviesData = io.readData("data/movies.csv");
+    private ArrayList<String> seriesData = io.readData("data/series.csv");
     private boolean titleFound = false;
 
 
@@ -19,26 +22,26 @@ public class Search {
 
     public void titleSearch(String title) {
 
-        ui.displayMessage("Søger efter titel: " + this.title);
+        ui.displayMessage("Søger efter titel: " + title);
 
-        for (String[] movie : moviesList) {
-            if (movie[0].equalsIgnoreCase(this.title)) {
-                ui.displayMessage("Fundet film: " + this.title);
+        for (String movie : moviesData) {
+            if (movie.equalsIgnoreCase(title)) {
+                ui.displayMessage("Fundet film: " + title);
                 titleFound = true;
                 break;
             }
         }
 
         for (String[] series : seriesList) {
-            if (series[0].equalsIgnoreCase(this.title)) {
-                ui.displayMessage("Fundet serie: " + this.title);
+            if (series[0].equalsIgnoreCase(title)) {
+                ui.displayMessage("Fundet serie: " + title);
                 titleFound = true;
                 break;
             }
         }
 
         if (!titleFound) {
-            ui.displayMessage("Ingen film eller serier fundet med titlen " + this.title);
+            ui.displayMessage("Ingen film eller serier fundet med titlen " + title);
         }
     }
 
@@ -134,6 +137,41 @@ public class Search {
                     return;
                 default:
                     ui.displayMessage("Ugyldigt valg. Prøv igen.");
+            }
+        }
+    }
+
+    public void readMovie() {
+
+        if (!moviesData.isEmpty()) {
+            for (String s : moviesData) {
+                String[] values = s.split(";");
+                int year = Integer.parseInt(values[1].trim());
+                String[] genre = values[2].trim().split(",");
+                double rating = Double.parseDouble(values[3].trim().replace(",", "."));
+                new Movie(values[0], year, genre, rating);
+            }
+        }
+    }
+
+    public void readSeries() {
+
+        if (!seriesData.isEmpty()) {
+            for (String s : seriesData) {
+                String[] values = s.split(";");
+                String[] genre = values[2].trim().split(",");
+                double rating = Double.parseDouble(values[3].trim().replace(",", "."));
+                String[] seasonEpisodePairs = values[4].trim().split(",");
+
+                for (String pair : seasonEpisodePairs) {
+                    String[] parts = pair.trim().split("-");
+                    if (parts.length == 2) {
+                        int season = Integer.parseInt(parts[0].trim());
+                        int episode = Integer.parseInt(parts[1].trim());
+
+                        new Series(values[0], values[1], genre, rating, season, episode);
+                    }
+                }
             }
         }
     }

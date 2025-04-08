@@ -41,22 +41,4 @@ public class Series extends Media {
     public void stop() {
 
     }
-
-    public void readSeries(){
-
-        FileIO io = new FileIO();
-        ArrayList<String> seriesList = io.readData("data/series.csv");
-
-        if (!seriesList.isEmpty()) {
-            for (String s : seriesList) {
-                String[] values = s.split(";");
-                String[] genre = values[2].split(",".trim());
-                double rating = Double.parseDouble(values[3]);
-                String[] part = values[4].split("-");
-                int season = Integer.parseInt(part[0]);
-                int episode = Integer.parseInt(part[1]);
-                Series series = new Series(values[0], values[1], genre, rating, season, episode);
-            }
-        }
-    }
 }

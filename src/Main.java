@@ -4,6 +4,7 @@ public class Main {
         StreamingService s = new StreamingService("StreamLy");
 
         s.startSession();
+        s.runStreamingService();
         s.endSession();
     }
 }
