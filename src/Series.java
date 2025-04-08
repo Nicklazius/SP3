@@ -17,7 +17,6 @@ public class Series extends Media {
         this.episode = episode;
     }
 
-    // Metoder – som giver adgang til informationer om objektet
     public String getTitle() {
         return title;
     }
@@ -34,11 +33,9 @@ public class Series extends Media {
         return rating;
     }
 
-    public void play() {
+    @Override
+    public String toString() {
 
-    }
-
-    public void stop() {
-
+        return "Titel: " + title + ", RunTime: " + runTime + ", Genre: " + String.join(", ", genre) + ", Rating: " + rating;
     }
 }

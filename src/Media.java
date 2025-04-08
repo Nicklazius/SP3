@@ -9,13 +9,13 @@ public class Media {
     protected String runTime;
     protected int season;
     protected int episode;
-    protected String[] genre = {"Action","Drama","Mystery","Adventure","Thriller","Comedy","History", "Animation", "Sci-fi", "Crime",
-            "Biography","Family","Romance","Talkshow","Documentary","Horror","War","Sport","Film-Noir","Musical","Western","Music","Fantasy",};
+    protected String[] genre = {"Action", "Drama", "Mystery", "Adventure", "Thriller", "Comedy", "History", "Animation", "Sci-fi", "Crime",
+            "Biography", "Family", "Romance", "Talkshow", "Documentary", "Horror", "War", "Sport", "Film-Noir", "Musical", "Western", "Music", "Fantasy",};
 
-    public Media(String title, int year, String[] genre, double rating, String runTime, int season, int episode){
+    public Media(String title, int year, String[] genre, double rating, String runTime, int season, int episode) {
 
         this.title = title;
-        this. year = year;
+        this.year = year;
         this.genre = genre;
         this.rating = rating;
         this.runTime = runTime;
@@ -35,5 +35,5 @@ public class Media {
         return year;
     }
 
-    }
 }
+
