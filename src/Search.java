@@ -19,6 +19,15 @@ public class Search extends Media {
 
         io.readData("data/movies.csv");
         io.readData("data/series.csv");
+        if (!moviesList.isEmpty() && ui.promptBinary("Gemt account fundet, vil du fortsætte herfra?: Y/N")) {
+            for (String s : data) {
+                String[] values = s.split(";");
+                createAccount(values[0], values[1]);
+            }
+
+            currentUser = account.getFirst();
+            ui.displayMessage("Du er nu logget ind som " + currentUser.getName());
+        }
     }
 
     public void titleSearch(String title) {
@@ -102,7 +111,7 @@ public class Search extends Media {
     public void searchMenu() {
 
         while (true) {
-            ui.displayMessage("1. Title Search\n2. Movies\n3. Series\n4. Genres\n5. Top10 Series\n6. Top10 Movies\n0. Afslut");
+            ui.displayMessage("1. Title Search\n2. Movies\n3. Series\n4. Genres\n5. Top10 Series\n6. Top10 Movies\n0. Logout");
 
             ui.displayMessage("Vælg en mulighed: ");
             String userChoice = ui.promptText("");
@@ -110,12 +119,12 @@ public class Search extends Media {
             switch (userChoice) {
                 case "1":
                     ui.displayMessage("Indtast titel: ");
-                    String title = ui.promptText("");  // Get the title input
+                    String title = ui.promptText("");
 
-                    if (title == null || title.trim().isEmpty()) {  // Check for empty or null input
+                    if (title == null || title.trim().isEmpty()) {
                         ui.displayMessage("Indtast venligst en titel.");
                     } else {
-                        titleSearch(title);  // Call the titleSearch method with the input title
+                        titleSearch(title);
                     }
                     break;
                 case "2":
