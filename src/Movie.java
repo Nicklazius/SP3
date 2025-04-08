@@ -2,7 +2,6 @@ import util.FileIO;
 
 import java.util.ArrayList;
 
-// En abstrakt klasse, som er en "grundform" for medier som film eller serier
 public class Movie extends Media {
 
     // Konstruktor – det der sker, når vi laver et nyt src.Media-objekt
@@ -31,16 +30,15 @@ public class Movie extends Media {
         return categories;
     }
 
-    // "Play" og "Stop" er metoder som vi bare skriver, men ikke udfylder endnu
-    public void play(){
+    public void play() {
 
     }
 
-    public void stop(){
+    public void stop() {
 
     }
 
-    public void readMovie(){
+    public void readMovie() {
 
         FileIO io = new FileIO();
         ArrayList<String> moviesList = io.readData("data/movies.csv");
