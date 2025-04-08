@@ -13,6 +13,10 @@ public class Search {
     private ArrayList<String[]> seriesList = new ArrayList<>();
     private ArrayList<String> moviesData = io.readData("data/movies.csv");
     private ArrayList<String> seriesData = io.readData("data/series.csv");
+
+    private ArrayList<Series> loadedSeries = readSeries();
+    private ArrayList<Movie> loadedMovies = readMovie();
+
     private boolean titleFound = false;
 
 
@@ -24,16 +28,16 @@ public class Search {
 
         ui.displayMessage("Søger efter titel: " + title);
 
-        for (String movie : moviesData) {
-            if (movie.equalsIgnoreCase(title)) {
+        for (Movie movie : loadedMovies) {
+            if (movie.getTitle().equalsIgnoreCase(title)) {
                 ui.displayMessage("Fundet film: " + title);
                 titleFound = true;
                 break;
             }
         }
 
-        for (String[] series : seriesList) {
-            if (series[0].equalsIgnoreCase(title)) {
+        for (Series series : loadedSeries) {
+            if (series.getTitle().equalsIgnoreCase(title)) {
                 ui.displayMessage("Fundet serie: " + title);
                 titleFound = true;
                 break;
@@ -141,7 +145,9 @@ public class Search {
         }
     }
 
-    public void readMovie() {
+    public ArrayList<Movie>  readMovie() {
+
+        ArrayList<Movie> createdMovies = new ArrayList<>();
 
         if (!moviesData.isEmpty()) {
             for (String s : moviesData) {
@@ -149,12 +155,15 @@ public class Search {
                 int year = Integer.parseInt(values[1].trim());
                 String[] genre = values[2].trim().split(",");
                 double rating = Double.parseDouble(values[3].trim().replace(",", "."));
-                new Movie(values[0], year, genre, rating);
+                createdMovies.add(new Movie(values[0], year, genre, rating));
             }
         }
+        return createdMovies;
     }
 
-    public void readSeries() {
+    public ArrayList<Series> readSeries() {
+
+        ArrayList<Series> createdSeries = new ArrayList<>();
 
         if (!seriesData.isEmpty()) {
             for (String s : seriesData) {
@@ -169,10 +178,11 @@ public class Search {
                         int season = Integer.parseInt(parts[0].trim());
                         int episode = Integer.parseInt(parts[1].trim());
 
-                        new Series(values[0], values[1], genre, rating, season, episode);
+                        createdSeries.add(new Series(values[0], values[1], genre, rating, season, episode));
                     }
                 }
             }
         }
+        return createdSeries;
     }
 }

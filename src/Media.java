@@ -10,7 +10,7 @@ public class Media {
     protected int season;
     protected int episode;
     protected String[] genre = {"Action","Drama","Mystery","Adventure","Thriller","Comedy","History", "Animation", "Sci-fi", "Crime",
-            "Biography","Family","Romance","Talkshow","Documentary","Horror","War","Sport","Film-Noir","Musical","Western","Music","Fantasy",};
+            "Biography","Family","Romance","Talk-show","Documentary","Horror","War","Sport","Film-Noir","Musical","Western","Music","Fantasy",};
 
     public Media(String title, int year, String[] genre, double rating, String runTime, int season, int episode){
 
@@ -35,5 +35,6 @@ public class Media {
         return year;
     }
 
+
     }
-}
+

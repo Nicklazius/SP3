@@ -22,6 +22,9 @@ public class StreamingService {
 
     public void startSession() {
         ArrayList<String> data = io.readData("data/account.csv");
+        for (String s: data){
+            System.out.println(s);
+        }
         ui.displayMessage("Velkommen til " + this.StreamName);
 
         if (!data.isEmpty() && ui.promptBinary("Gemt account fundet, vil du fortsætte herfra?: Y/N")) {

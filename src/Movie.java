@@ -1,13 +1,14 @@
-import util.FileIO;
-
 import java.util.ArrayList;
 
+// En abstrakt klasse, som er en "grundform" for medier som film eller serier
 public class Movie extends Media {
+
+    private int year;
+    private String title;
 
     // Konstruktor – det der sker, når vi laver et nyt src.Media-objekt
     public Movie(String title, int year, String[] genre, double rating) {
-        super(title, year, genre, rating, null, 0, 0);
-
+        super(title, year, genre, rating,null,0,0);
         this.title = title;
         this.year = year;
         this.genre = genre;
@@ -26,15 +27,16 @@ public class Movie extends Media {
         return rating;
     }
 
-    public String[] getCategories() {
-        return categories;
-    }
+    //public String[] getCategories() {
+     //   return categories;
 
-    public void play() {
 
-    }
-
-    public void stop() {
+    // "Play" og "Stop" er metoder som vi bare skriver, men ikke udfylder endnu
+    /*public void play(){
 
     }
+
+    public void stop(){
+
+    }*/
 }
