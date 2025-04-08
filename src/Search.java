@@ -5,29 +5,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 
-public class Search extends Media {
+public class Search {
     FileIO io = new FileIO();
     TextUI ui = new TextUI();
 
     private String[] categories = {"Title Search", "Movies", "Series", "Genres", "Top10 Series", "Top10 Movies"};
     private ArrayList<String[]> moviesList = new ArrayList<>();
     private ArrayList<String[]> seriesList = new ArrayList<>();
+    private String title;
     private boolean titleFound = false;
 
 
     public Search() {
 
-        io.readData("data/movies.csv");
-        io.readData("data/series.csv");
-        if (!moviesList.isEmpty() && ui.promptBinary("Gemt account fundet, vil du fortsætte herfra?: Y/N")) {
-            for (String s : data) {
-                String[] values = s.split(";");
-                createAccount(values[0], values[1]);
-            }
-
-            currentUser = account.getFirst();
-            ui.displayMessage("Du er nu logget ind som " + currentUser.getName());
-        }
     }
 
     public void titleSearch(String title) {

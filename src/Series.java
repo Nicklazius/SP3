@@ -34,13 +34,12 @@ public class Series extends Media {
         return rating;
     }
 
-    // "Play" og "Stop" metoder
     public void play() {
-        // her kunne du f.eks. skrive: System.out.println("Spiller serien " + title);
+
     }
 
     public void stop() {
-        // her kunne du f.eks. skrive: System.out.println("Stopper serien " + title);
+
     }
 
     public void readSeries(){
