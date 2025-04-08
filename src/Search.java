@@ -1,12 +1,9 @@
-import util.FileIO;
 import util.TextUI;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 
 public class Search {
-    FileIO io = new FileIO();
     TextUI ui = new TextUI();
 
     private String[] categories = {"Title Search", "Movies", "Series", "Genres", "Top10 Series", "Top10 Movies"};
