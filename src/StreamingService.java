@@ -74,4 +74,22 @@ public class StreamingService {
         ArrayList<String> readMovies = io.readData("data/Movies.csv");
         ArrayList<String> readSeries = io.readData("data/Series.csv");
     }
+    private static void searchMenu() {
+        Account acc = new Account("","");
+        Scanner scan = new Scanner(System.in);
+        while (true) {
+            System.out.println("1. Se alt media");
+            System.out.println("2. Søg efter film");
+            System.out.println("3. Søg efter serie");
+            System.out.println("4. Søg efter genre");
+            System.out.println("5. Vis historie");
+            System.out.println("6. Vis gemte media");
+            System.out.println("7. logout");
+
+            int choice = scan.nextInt();
+
+        }
+    }
+
+
 }
