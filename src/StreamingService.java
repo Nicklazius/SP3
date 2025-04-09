@@ -34,7 +34,7 @@ public class StreamingService {
             }
 
             currentUser = account.getFirst();
-            ui.displayMessage("Du er nu logget ind som " + currentUser.getName() + "\n");
+            ui.displayMessage("Du er nu logget ind som " + currentUser.getName());
         } else {
             registerUser();
         }

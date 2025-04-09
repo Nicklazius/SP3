@@ -30,6 +30,6 @@ public class Movie extends Media {
     @Override
     public String toString() {
 
-        return "Titel: " + title + ", År: " + year + ", Genre: " + String.join(", ", genre) + ", Rating: " + rating;
+        return "Titel: " + title + "  Info om filmen - År: " + year + ", Genre: " + String.join(", ", genre) + ", Rating: " + rating;
     }
 }

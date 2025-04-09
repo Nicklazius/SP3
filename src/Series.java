@@ -36,6 +36,6 @@ public class Series extends Media {
     @Override
     public String toString() {
 
-        return "Titel: " + title + ", RunTime: " + runTime + ", Genre: " + String.join(", ", genre) + ", Rating: " + rating;
+        return "Titel: " + title + "  Info om serien - RunTime: " + runTime + ", Genre: " + String.join(", ", genre) + ", Rating: " + rating;
     }
 }

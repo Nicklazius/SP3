@@ -27,12 +27,16 @@ public class Search {
 
     public void titleSearch(String title) {
 
-        ui.displayMessage("Søger efter titel: " + title);
-
         for (Movie movie : loadedMovies) {
             if (movie.getTitle().equalsIgnoreCase(title)) {
                 ui.displayMessage("Fundet film: " + title);
                 titleFound = true;
+                if (ui.promptBinary("Vil du afspille " + title + "?: Y/N")) {
+                    playMenu(title);
+                } else {
+                    ui.displayMessage("Tilbage til Hovedmenu:");
+                    searchMenu();
+                }
                 break;
             }
         }
@@ -41,19 +45,19 @@ public class Search {
             if (series.getTitle().equalsIgnoreCase(title)) {
                 ui.displayMessage("Fundet serie: " + title);
                 titleFound = true;
+                if (ui.promptBinary("Vil du afspille " + title + "?: Y/N")) {
+                    playMenu(title);
+                } else {
+                    ui.displayMessage("Tilbage til Hovedmenu:");
+                    searchMenu();
+                }
                 break;
             }
         }
 
         if (!titleFound) {
-            ui.displayMessage("Ingen film eller serier fundet med titlen " + title);
-        }
+            ui.displayMessage("Ingen film eller serier blev fundet med titlen " + title + "\nTilbage til Hovedmenu.");
 
-        if (ui.promptBinary("Vil du afspille " + title + "?: Y/N")) {
-            playMenu(title);
-        } else {
-            ui.displayMessage("Tilbage til startmenu:");
-            searchMenu();
         }
     }
 
@@ -99,7 +103,7 @@ public class Search {
         loadedSeries.sort((s1, s2) -> Double.compare(s2.getRating(), s1.getRating()));
         ui.displayMessage("Top 10 Serier: ");
         for (int i = 0; i < Math.min(10, seriesList.size()); i++) {
-            System.out.println(loadedSeries.get(i).toString());
+            ui.displayMessage(loadedSeries.get(i).toString());
         }
     }
 
@@ -109,26 +113,34 @@ public class Search {
         ui.displayMessage("Top 10 Film: ");
 
         for (int i = 0; i < Math.min(10, loadedMovies.size()); i++) {
-            System.out.println(loadedMovies.get(i).toString());
+            ui.displayMessage(loadedMovies.get(i).toString());
         }
     }
 
     public void searchMenu() {
 
         while (true) {
-            ui.displayMessage("StartMenu: Vælg en mulighed:");
-            System.out.println("1. Title Search\n2. Show All Movies\n3. Show All Series\n4. Genres\n5. Top10 Movies\n6. Top10 Series\n0. Logout");
+            ui.displayMessage("Hovedmenu: Vælg en mulighed:");
+            ui.displayMessage("1. Title Search\n2. Show All Movies\n3. Show All Series\n4. Genres\n5. Top10 Movies\n6. Top10 Series\n0. Logout");
             String input = sc.nextLine();
 
             switch (input) {
                 case "1":
-                    System.out.println("Indtast titel: ");
-                    String title = ui.promptText("");
+                    while (true) {
+                        System.out.print("Indtast titel eller skriv ESC");
+                        String title = ui.promptText("");
 
-                    if (title == null || title.trim().isEmpty()) {
-                        System.out.println("Indtast venligst en titel.");
-                    } else {
-                        titleSearch(title);
+                        if (title == null || title.trim().isEmpty()) {
+
+                        } else if (title.equalsIgnoreCase("esc")) {
+                            searchMenu();
+                            break;
+                        } else if (!titleExists(title)) {
+
+                        } else {
+                            titleSearch(title);
+                            break;
+                        }
                     }
                     break;
                 case "2":
@@ -203,12 +215,12 @@ public class Search {
             String input = ui.promptText("");
 
             if (input.equalsIgnoreCase("1")) {
-                System.out.println(title + " er sat på pause");
+                ui.displayMessage(title + " er sat på pause");
             } else if (input.equalsIgnoreCase("2")) {
-                System.out.println(title + " er afsluttet");
+                ui.displayMessage(title + " er afsluttet");
                 return;
             } else if (input.equalsIgnoreCase("3")) {
-                System.out.println(title + " er Genoptaget");
+                ui.displayMessage(title + " er Genoptaget");
             } else
                 ui.displayMessage("");
         }
@@ -226,5 +238,19 @@ public class Search {
             String[] values = s.split(";");
             seriesList.add(values);
         }
+    }
+
+    private boolean titleExists(String title) {
+        for (Movie movie : loadedMovies) {
+            if (movie.getTitle().equalsIgnoreCase(title)) {
+                return true;
+            }
+        }
+        for (Series series : loadedSeries) {
+            if (series.getTitle().equalsIgnoreCase(title)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

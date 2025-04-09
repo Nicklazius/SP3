@@ -6,20 +6,21 @@ import java.util.Scanner;
 
 public class TextUI {
     Scanner sc = new Scanner(System.in);
-    public ArrayList<String> promptChoice( ArrayList<String> options, int limit, String msg){
+
+    public ArrayList<String> promptChoice(ArrayList<String> options, int limit, String msg) {
         displayList(options, "");
         ArrayList<String> choices = new ArrayList<>();  //Lave en beholder til at gemme brugerens valg
 
-        while(choices.size() < limit){             //tjekke om brugeren skal vælge flere drinks
+        while (choices.size() < limit) {             //tjekke om brugeren skal vælge flere drinks
             int choice = promptNumeric(msg);
-            choices.add(options.get(choice-1));
+            choices.add(options.get(choice - 1));
         }
         return choices;
     }
 
-    public void displayList(ArrayList<String>list, String msg) {
-        for (int i = 0; i < list.size();i++) {
-            System.out.println(i+1+". "+list.get(i));
+    public void displayList(ArrayList<String> list, String msg) {
+        for (int i = 0; i < list.size(); i++) {
+            System.out.println(i + 1 + ". " + list.get(i));
         }
     }
 
@@ -55,7 +56,7 @@ public class TextUI {
     }
      */
 
-    public String promptText(String msg){
+    public String promptText(String msg) {
 
         displayMessage(msg);                //Stille brugeren et spørgsmål
         String input = sc.nextLine();           //Give brugere et sted at placere sit svar og vente på svaret
@@ -65,20 +66,17 @@ public class TextUI {
 
     public boolean promptBinary(String msg) {
         String choice = this.promptText(msg);
-        if(choice.equalsIgnoreCase("Y")){
+        if (choice.equalsIgnoreCase("Y")) {
             return true;
         } else if (choice.equalsIgnoreCase("N")) {
             return false;
-
-        }else{
-            promptBinary(msg);
-
+        } else {
+            return promptBinary(msg);
         }
-        return false;
     }
 
     public void displayMessage(String msg) {
 
-        System.out.println("\n"+msg);
+        System.out.println(msg);
     }
 }
