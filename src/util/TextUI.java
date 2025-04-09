@@ -75,6 +75,23 @@ public class TextUI {
         }
     }
 
+    public int promptNumber(String message, int min, int max) {
+        int number;
+        while (true) {
+            try {
+                String input = promptText(message);
+                number = Integer.parseInt(input);
+                if (number >= min && number <= max) {
+                    return number;
+                } else {
+                    displayMessage("Skriv et gyldigt tal.");
+                }
+            } catch (NumberFormatException ignored) {}
+            System.out.println("Indtast venligst et gyldigt tal mellem " + min + " og " + max);
+        }
+    }
+
+
     public void displayMessage(String msg) {
 
         System.out.println(msg);
