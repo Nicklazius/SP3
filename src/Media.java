@@ -27,5 +27,9 @@ public class Media {
     public void setTitle(String title) {
         this.title = title;
     }
+
+    public String[] getGenre() {
+        return genre;
+    }
 }
 

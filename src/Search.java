@@ -1,6 +1,5 @@
 import util.FileIO;
 import util.TextUI;
-import util.UserDataHandler;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -17,6 +16,10 @@ public class Search {
     private ArrayList<String> seriesData = io.readData("data/series.csv");
     private ArrayList<Series> loadedSeries = readSeries();
     private ArrayList<Movie> loadedMovies = readMovie();
+
+    String genreMsg = ("1. Action\n2. Drama\n3. Mystery\n4. Adventure\n5. Thriller\n6. Comedy\n7. History\n" +
+            "8. Animation\n9. Sci-fi\n10. Crime\n11. Biography\n12. Family\n13. Romance\n14. Talkshow\n15. Documentary\n" +
+            "16. Horror\n17. War\n18. Sport\n19. Film-Noir\n20. Musical\n21. Western\n22. Music\n23. Fantasy").toLowerCase().trim();
 
     public Search() {
         loadMovieList();
@@ -92,7 +95,8 @@ public class Search {
 
         while (true) {
             ui.displayMessage("Hovedmenu: Vælg en mulighed:");
-            ui.displayMessage("1. Title Search\n2. All Movies\n3. Show All Series\n4. Genres\n5. Top10 Movies\n6. Top10 Series\n8. Sete Film/Serier\n9. Gemte Film/Serier\n0. Logout");
+            ui.displayMessage("1. Titel Søgning\n2. Alle Film\n3. Vis alle Serier\n4. Film Genre\n" +
+                    "5. Serie Genre\n6. Top10 Film\n7. Top10 Serier\n8. Sete Film\n9. Gemte Film\n0. Logout");
             String input = sc.nextLine();
 
             switch (input) {
@@ -118,10 +122,10 @@ public class Search {
                     top10Series();
                     break;
                 case "8":
-                    userDataHandler.showWatched(ui);
+                    userDataHandler.showWatched();
                     break;
                 case "9":
-                    userDataHandler.showSaved(ui);
+                    userDataHandler.showSaved();
                     break;
                 case "0":
                     System.out.println("Farvel :)");
@@ -129,6 +133,7 @@ public class Search {
                 default:
                     System.out.println("Skriv et gyldigt tal.");
             }
+            break;
         }
     }
 
@@ -204,8 +209,14 @@ public class Search {
     }
 
     public void searchByGenreMovie() {
-        String inputGenre = ui.promptText("Indtast genre du vil søge efter (fx Drama, Comedy):").toLowerCase().trim();
+        String inputGenre = ui.promptText(genreMsg);
         boolean found = false;
+
+        int choice = ui.promptNumber("Indtast nummeret på den film du vil afspille: ", 1, 23);
+
+        Movie selectedMovie = loadedMovies.get(choice - 1);
+        ui.displayMessage("Afspiller: " + selectedMovie.getTitle());
+        playMenu(selectedMovie.getTitle());
 
         ui.displayMessage("Film i genren: " + inputGenre);
         for (Movie movie : loadedMovies) {
@@ -224,7 +235,7 @@ public class Search {
     }
 
     public void searchByGenreSeries() {
-        String inputGenre = ui.promptText("Indtast genre du vil søge efter (fx Drama, Comedy):").toLowerCase().trim();
+        String inputGenre = ui.promptText(genreMsg);
         boolean found = false;
 
         ui.displayMessage("Serier i genren: " + inputGenre);
@@ -248,8 +259,14 @@ public class Search {
         ui.displayMessage("Top 10 Film: ");
 
         for (int i = 0; i < Math.min(10, loadedMovies.size()); i++) {
-            ui.displayMessage(loadedMovies.get(i).toString());
+            ui.displayMessage((i + 1) + ". " + loadedMovies.get(i).toString());
         }
+
+        int choice = ui.promptNumber("Indtast nummeret på den film du vil afspille: ", 1, 10);
+
+        Movie selectedMovie = loadedMovies.get(choice - 1);
+        ui.displayMessage("Afspiller: " + selectedMovie.getTitle());
+        playMenu(selectedMovie.getTitle());
     }
 
     public void top10Series() {
@@ -257,8 +274,14 @@ public class Search {
         ui.displayMessage("Top 10 Serier: ");
 
         for (int i = 0; i < Math.min(10, loadedSeries.size()); i++) {
-            ui.displayMessage(loadedSeries.get(i).toString());
+            ui.displayMessage((i + 1) + ". " + loadedSeries.get(i).toString());
         }
+
+        int choice = ui.promptNumber("Indtast nummeret på den serie du vil afspille: ", 1, 10);
+
+        Series selectedSeries = loadedSeries.get(choice - 1);
+        ui.displayMessage("Afspiller: " + selectedSeries.getTitle());
+        playMenu(selectedSeries.getTitle());
     }
 
     public void movieMenu(ArrayList<Movie> loadedMovies) {
