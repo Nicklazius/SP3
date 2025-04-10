@@ -78,7 +78,7 @@ public class Search {
         for (String[] movie : moviesList) {
             String[] genres = movie[2].split(",");
             for (String genre : genres) {
-                genre = genre.trim(); // Fjern evt. mellemrum
+                genre = genre.trim();
                 if (!allGenres.contains(genre)) {
                     allGenres.add(genre);
                 }
@@ -96,6 +96,46 @@ public class Search {
         }
 
         ui.displayMessage("Alle genrer: " + allGenres);
+    }
+
+    public void searchByGenreMovie() {
+        String inputGenre = ui.promptText("Indtast genre du vil søge efter (fx Drama, Comedy):").toLowerCase().trim();
+        boolean found = false;
+
+        ui.displayMessage("Film i genren: " + inputGenre);
+        for (Movie movie : loadedMovies) {
+            for (String genre : movie.getGenre()) {
+                if (genre.toLowerCase().trim().equals(inputGenre)) {
+                    System.out.println(movie);
+                    found = true;
+                    break;
+                }
+            }
+        }
+
+        if (!found) {
+            ui.displayMessage("Ingen film fundet i genren: " + inputGenre);
+        }
+    }
+
+    public void searchByGenreSeries(){
+        String inputGenre = ui.promptText("Indtast genre du vil søge efter (fx Drama, Comedy):").toLowerCase().trim();
+        boolean found = false;
+
+        ui.displayMessage("Serier i genren: " + inputGenre);
+        for (Series series : loadedSeries) {
+            for (String genre : series.getGenre()) {
+                if (genre.toLowerCase().trim().equals(inputGenre)) {
+                    System.out.println(series);
+                    found = true;
+                    break;
+                }
+            }
+        }
+
+        if (!found) {
+            ui.displayMessage("Ingen serier fundet i genren: " + inputGenre);
+        }
     }
 
     public void top10Series() {
@@ -150,14 +190,16 @@ public class Search {
                     series();
                     break;
                 case "4":
-                    genres();
+                    searchByGenreMovie();
                     break;
                 case "5":
-                    top10Movies();
+                    searchByGenreSeries();
                     break;
                 case "6":
-                    top10Series();
+                    top10Movies();
                     break;
+                case "7":
+                    top10Series();
                 case "0":
                     System.out.println("Farvel :)");
                     return;
