@@ -1,8 +1,5 @@
-import java.util.ArrayList;
-
 public class Media {
 
-    // Egenskaber (variabler)
     protected String title;
     protected int year;
     protected double rating;
@@ -30,10 +27,5 @@ public class Media {
     public void setTitle(String title) {
         this.title = title;
     }
-
-    public int getYear() {
-        return year;
-    }
-
 }
 

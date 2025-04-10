@@ -17,7 +17,6 @@ public class Search {
     private ArrayList<String> seriesData = io.readData("data/series.csv");
     private ArrayList<Series> loadedSeries = readSeries();
     private ArrayList<Movie> loadedMovies = readMovie();
-    private boolean titleFound = false;
 
     public Search() {
 
@@ -27,11 +26,14 @@ public class Search {
 
     public void titleSearch(String title) {
 
+        boolean titleFound = false;
+
         for (Movie movie : loadedMovies) {
             if (movie.getTitle().equalsIgnoreCase(title)) {
                 ui.displayMessage("Fundet film: " + title);
                 titleFound = true;
                 if (ui.promptBinary("Vil du afspille " + title + "?: Y/N")) {
+                    ui.displayMessage("Afspiller: " + title);
                     playMenu(title);
                 } else {
                     ui.displayMessage("Tilbage til Hovedmenu:");
@@ -46,6 +48,7 @@ public class Search {
                 ui.displayMessage("Fundet serie: " + title);
                 titleFound = true;
                 if (ui.promptBinary("Vil du afspille " + title + "?: Y/N")) {
+                    ui.displayMessage("Afspiller: " + title);
                     playMenu(title);
                 } else {
                     ui.displayMessage("Tilbage til Hovedmenu:");
@@ -57,13 +60,28 @@ public class Search {
 
         if (!titleFound) {
             ui.displayMessage("Ingen film eller serier blev fundet med titlen " + title + "\nTilbage til Hovedmenu.");
-
         }
     }
 
-    public void movies() {
+    public void titles() {
 
-        ui.displayList(moviesData, "");
+        System.out.println("Indtast titel eller skriv ESC for at komme tilbage til Hovedmenu'en.");
+
+        while (true) {
+            String title = sc.nextLine();;
+
+            if (title == null || title.trim().isEmpty()) {
+                ui.displayMessage("Skriv et venligst en titel.");
+            } else if (title.equalsIgnoreCase("esc")) {
+                searchMenu();
+                break;
+            } else if (!titleExists(title)) {
+                ui.displayMessage("Ingen film eller serier blev fundet med titlen " + title + "\nSøg igen eller skriv ESC for at komme tilbage til Hovedmenu'en.");
+            } else {
+                titleSearch(title);
+                break;
+            }
+        }
     }
 
     public void series() {
@@ -142,9 +160,11 @@ public class Search {
 
         loadedSeries.sort((s1, s2) -> Double.compare(s2.getRating(), s1.getRating()));
         ui.displayMessage("Top 10 Serier: ");
+
         for (int i = 0; i < Math.min(10, seriesList.size()); i++) {
             ui.displayMessage(loadedSeries.get(i).toString());
         }
+        searchMenu();
     }
 
     public void top10Movies() {
@@ -155,39 +175,25 @@ public class Search {
         for (int i = 0; i < Math.min(10, loadedMovies.size()); i++) {
             ui.displayMessage(loadedMovies.get(i).toString());
         }
+        searchMenu();
     }
 
     public void searchMenu() {
 
         while (true) {
             ui.displayMessage("Hovedmenu: Vælg en mulighed:");
-            ui.displayMessage("1. Title Search\n2. Show All Movies\n3. Show All Series\n4. Genres\n5. Top10 Movies\n6. Top10 Series\n0. Logout");
+            ui.displayMessage("1. Title Search\n2. All Movies\n3. Show All Series\n4. Genres\n5. Top10 Movies\n6. Top10 Series\n0. Logout");
             String input = sc.nextLine();
 
             switch (input) {
                 case "1":
-                    while (true) {
-                        System.out.print("Indtast titel eller skriv ESC");
-                        String title = ui.promptText("");
-
-                        if (title == null || title.trim().isEmpty()) {
-
-                        } else if (title.equalsIgnoreCase("esc")) {
-                            searchMenu();
-                            break;
-                        } else if (!titleExists(title)) {
-
-                        } else {
-                            titleSearch(title);
-                            break;
-                        }
-                    }
+                    titles();
                     break;
                 case "2":
-                    movies();
+                    movieMenu(loadedMovies);
                     break;
                 case "3":
-                    series();
+                    seriesMenu(loadedSeries);
                     break;
                 case "4":
                     searchByGenreMovie();
@@ -202,10 +208,11 @@ public class Search {
                     top10Series();
                 case "0":
                     System.out.println("Farvel :)");
-                    return;
+                    break;
                 default:
-                    System.out.println("Ugyldigt valg. Prøv igen.");
+                    System.out.println("Skriv et gyldigt tal.");
             }
+            break;
         }
     }
 
@@ -253,18 +260,32 @@ public class Search {
     public void playMenu(String title) {
 
         while (true) {
-            ui.displayMessage("1. Pause\n2. Afslut\n3. Genoptag");
-            String input = ui.promptText("");
+            String input = ui.promptText("1. Pause\n2. Tilbage til Hovedmenu");
 
             if (input.equalsIgnoreCase("1")) {
                 ui.displayMessage(title + " er sat på pause");
+
+                while (true) {
+                    String resumeInput = ui.promptText("1. Genoptag\n2. Tilbage til Hovedmenu");
+
+                    if (resumeInput.equalsIgnoreCase("1")) {
+                        ui.displayMessage(title + " er Genoptaget");
+                        playMenu(title);
+                        break;
+                    } else if (resumeInput.equalsIgnoreCase("2")) {
+                        searchMenu();
+                        break;
+                    } else {
+                        ui.displayMessage("Skriv et gyldigt tal. " + title + " er stadig på pause");
+                    }
+                }
+                break;
             } else if (input.equalsIgnoreCase("2")) {
-                ui.displayMessage(title + " er afsluttet");
-                return;
-            } else if (input.equalsIgnoreCase("3")) {
-                ui.displayMessage(title + " er Genoptaget");
-            } else
-                ui.displayMessage("");
+                searchMenu();
+                break;
+            } else {
+                ui.displayMessage("Skriv et gyldigt tal. " + title + " afspiller stadig");
+            }
         }
     }
 
@@ -282,7 +303,7 @@ public class Search {
         }
     }
 
-    private boolean titleExists(String title) {
+    public boolean titleExists(String title) {
         for (Movie movie : loadedMovies) {
             if (movie.getTitle().equalsIgnoreCase(title)) {
                 return true;
@@ -295,4 +316,33 @@ public class Search {
         }
         return false;
     }
+
+    public void movieMenu(ArrayList<Movie> loadedMovies) {
+        ui.displayMessage("Vælg en film:");
+
+        for (int i = 0; i < loadedMovies.size(); i++) {
+            ui.displayMessage((i + 1) + ". " + loadedMovies.get(i).toString());
+        }
+
+        int choice = ui.promptNumber("Indtast nummeret på den film du vil afspille: ", 1, loadedMovies.size());
+
+        Movie selectedMovie = loadedMovies.get(choice - 1);
+        ui.displayMessage("Afspiller: " + selectedMovie.getTitle());
+        playMenu(selectedMovie.getTitle());
+    }
+
+    public void seriesMenu(ArrayList<Series> loadedSeries) {
+        ui.displayMessage("Vælg en serie:");
+
+        for (int i = 0; i < loadedSeries.size(); i++) {
+            ui.displayMessage((i + 1) + ". " + loadedSeries.get(i).toString());
+        }
+
+        int choice = ui.promptNumber("Indtast nummeret på den serie du vil afspille: ", 1, loadedSeries.size());
+
+        Series selectedSeries = loadedSeries.get(choice - 1);
+        ui.displayMessage("Afspiller: " + selectedSeries.getTitle());
+        playMenu(selectedSeries.getTitle());
+    }
+
 }
