@@ -24,10 +24,6 @@ public class Media {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public String[] getGenre() {
         return genre;
     }

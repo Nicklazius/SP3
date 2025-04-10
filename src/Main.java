@@ -5,6 +5,5 @@ public class Main {
 
         s.startSession();
         s.runStreamingService();
-        s.endSession();
     }
 }

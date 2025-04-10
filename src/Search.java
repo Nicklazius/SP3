@@ -18,7 +18,7 @@ public class Search {
     private ArrayList<Movie> loadedMovies = readMovie();
 
     String genreMsg = ("1. Action\n2. Drama\n3. Mystery\n4. Adventure\n5. Thriller\n6. Comedy\n7. History\n" +
-            "8. Animation\n9. Sci-fi\n10. Crime\n11. Biography\n12. Family\n13. Romance\n14. Talkshow\n15. Documentary\n" +
+            "8. Animation\n9. Sci-fi\n10. Crime\n11. Biography\n12. Family\n13. Romance\n14. Talk-show\n15. Documentary\n" +
             "16. Horror\n17. War\n18. Sport\n19. Film-Noir\n20. Musical\n21. Western\n22. Music\n23. Fantasy").toLowerCase().trim();
 
     public Search() {
@@ -26,48 +26,45 @@ public class Search {
         loadSeriesList();
     }
 
-    public void titleSearch(String title) {
+    public void searchMenu() {
 
-        boolean titleFound = false;
-
-        for (Movie movie : loadedMovies) {
-            if (movie.getTitle().equalsIgnoreCase(title)) {
-                ui.displayMessage("Fundet film: " + title);
-                titleFound = true;
-                if (ui.promptBinary("Vil du afspille " + title + "?: Y/N")) {
-                    ui.displayMessage("Afspiller: " + title);
-                    playMenu(title);
-
-                    if (ui.promptBinary("Vil du gemme " + title + " som favorit?: Y/N")) {
-                        userDataHandler.addToSaved(title);
-                        ui.displayMessage(title + " blev gemt som favorit.");
-                    }
-                }
+        ui.displayMessage("Hovedmenu: Vælg en mulighed:");
+        ui.displayMessage("1. Titel Søgning\n2. Alle Film\n3. Alle Serier\n4. Søg Genre for Film\n" +
+                "5. Søg Genre for Serier\n6. Top10 Film\n7. Top10 Serier\n8. Sete Film/Serier\n0. Logout");
+        String input = sc.nextLine();
+        switch (input) {
+            case "1":
+                titles();
+                break;
+            case "2":
+                movieMenu(loadedMovies);
+                break;
+            case "3":
+                seriesMenu(loadedSeries);
+                break;
+            case "4":
+                searchByGenreMovie();
+                break;
+            case "5":
+                searchByGenreSeries();
+                break;
+            case "6":
+                top10Movies();
+                break;
+            case "7":
+                top10Series();
+                break;
+            case "8":
+                userDataHandler.showWatched();
+                break;
+            case "0":
+                System.out.println("Farvel :)\nDu er nu logget ud.");
+                System.exit(0);
+                break;
+            default:
+                System.out.println("Skriv et gyldigt tal.");
                 searchMenu();
                 break;
-            }
-        }
-
-        for (Series series : loadedSeries) {
-            if (series.getTitle().equalsIgnoreCase(title)) {
-                ui.displayMessage("Fundet serie: " + title);
-                titleFound = true;
-                if (ui.promptBinary("Vil du afspille " + title + "?: Y/N")) {
-                    ui.displayMessage("Afspiller: " + title);
-                    playMenu(title);
-
-                    if (ui.promptBinary("Vil du gemme " + title + " som favorit?: Y/N")) {
-                        userDataHandler.addToSaved(title);
-                        ui.displayMessage(title + " blev gemt som favorit.");
-                    }
-                }
-                searchMenu();
-                break;
-            }
-        }
-
-        if (!titleFound) {
-            ui.displayMessage("Ingen film eller serier blev fundet med titlen " + title + "\nTilbage til Hovedmenu.");
         }
     }
 
@@ -81,61 +78,174 @@ public class Search {
                 ui.displayMessage("Skriv venligst en titel.");
             } else if (title.equalsIgnoreCase("esc")) {
                 searchMenu();
-                break;
+                return;
             } else if (!titleExists(title)) {
                 ui.displayMessage("Ingen film eller serier blev fundet med titlen " + title + "\nSøg igen eller skriv ESC for at komme tilbage til Hovedmenu'en.");
             } else {
                 titleSearch(title);
-                break;
+                return;
             }
         }
     }
 
-    public void searchMenu() {
+    public void movieMenu(ArrayList<Movie> loadedMovies) {
+        ui.displayMessage("Vælg en film:");
+
+        for (int i = 0; i < loadedMovies.size(); i++) {
+            ui.displayMessage((i + 1) + ". " + loadedMovies.get(i).toString());
+        }
+
+        int choice = ui.promptNumber("Indtast nummeret på den film du vil afspille: ", 1, loadedMovies.size());
+
+        Movie selectedMovie = loadedMovies.get(choice - 1);
+        ui.displayMessage("Afspiller: " + selectedMovie.getTitle());
+        playMenu(selectedMovie.getTitle());
+    }
+
+    public void seriesMenu(ArrayList<Series> loadedSeries) {
+        ui.displayMessage("Vælg en serie:");
+
+        for (int i = 0; i < loadedSeries.size(); i++) {
+            ui.displayMessage((i + 1) + ". " + loadedSeries.get(i).toString());
+        }
+
+        int choice = ui.promptNumber("Indtast nummeret på den serie du vil afspille: ", 1, loadedSeries.size());
+
+        Series selectedSeries = loadedSeries.get(choice - 1);
+        ui.displayMessage("Afspiller: " + selectedSeries.getTitle());
+        playMenu(selectedSeries.getTitle());
+    }
+
+    public void searchByGenreMovie() {
+        String[] genres = genreMsg.split("\n");
 
         while (true) {
-            ui.displayMessage("Hovedmenu: Vælg en mulighed:");
-            ui.displayMessage("1. Titel Søgning\n2. Alle Film\n3. Vis alle Serier\n4. Film Genre\n" +
-                    "5. Serie Genre\n6. Top10 Film\n7. Top10 Serier\n8. Sete Film\n9. Gemte Film\n0. Logout");
-            String input = sc.nextLine();
+            int choice = ui.promptNumber(genreMsg + "\nVælg venligst en genre:", 1, genres.length);
+            String inputGenre = genres[choice - 1].substring(3).toLowerCase().trim();
+            ArrayList<Movie> genreMatches = new ArrayList<>();
 
-            switch (input) {
-                case "1":
-                    titles();
-                    break;
-                case "2":
-                    movieMenu(loadedMovies);
-                    break;
-                case "3":
-                    seriesMenu(loadedSeries);
-                    break;
-                case "4":
-                    searchByGenreMovie();
-                    break;
-                case "5":
-                    searchByGenreSeries();
-                    break;
-                case "6":
-                    top10Movies();
-                    break;
-                case "7":
-                    top10Series();
-                    break;
-                case "8":
-                    userDataHandler.showWatched();
-                    break;
-                case "9":
-                    userDataHandler.showSaved();
-                    break;
-                case "0":
-                    System.out.println("Farvel :)");
-                    return;
-                default:
-                    System.out.println("Skriv et gyldigt tal.");
+            for (Movie movie : loadedMovies) {
+                for (String genre : movie.getGenre()) {
+                    if (genre.toLowerCase().trim().equals(inputGenre)) {
+                        genreMatches.add(movie);
+                        break;
+                    }
+                }
             }
+
+            if (genreMatches.isEmpty()) {
+                ui.displayMessage("Ingen film fundet i genren: " + inputGenre + "\nPrøv igen.");
+                continue;
+            }
+
+            ui.displayMessage("Film i genren: " + inputGenre);
+            for (int i = 0; i < genreMatches.size(); i++) {
+                ui.displayMessage((i + 1) + ". " + genreMatches.get(i).toString());
+            }
+
+            int filmChoice = ui.promptNumber("Indtast nummeret på den film du vil afspille: ", 1, genreMatches.size());
+            Movie selectedMovie = genreMatches.get(filmChoice - 1);
+            ui.displayMessage("Afspiller: " + selectedMovie.getTitle());
+            playMenu(selectedMovie.getTitle());
             break;
         }
     }
+
+
+    public void searchByGenreSeries() {
+        String[] genres = genreMsg.split("\n");
+
+        while (true) {
+            int choice = ui.promptNumber(genreMsg + "\nVælg venligst en genre:", 1, genres.length);
+            String inputGenre = genres[choice - 1].substring(3).toLowerCase().trim();
+
+            ArrayList<Series> genreMatches = new ArrayList<>();
+
+            for (Series series : loadedSeries) {
+                for (String genre : series.getGenre()) {
+                    if (genre.toLowerCase().trim().equals(inputGenre)) {
+                        genreMatches.add(series);
+                        break;
+                    }
+                }
+            }
+
+            if (genreMatches.isEmpty()) {
+                ui.displayMessage("Ingen film fundet i genren: " + inputGenre + "\nPrøv igen.");
+                continue;
+            }
+
+            ui.displayMessage("Film i genren: " + inputGenre);
+            for (int i = 0; i < genreMatches.size(); i++) {
+                ui.displayMessage((i + 1) + ". " + genreMatches.get(i).toString());
+            }
+
+            int seriesChoice = ui.promptNumber("Indtast nummeret på den film du vil afspille: ", 1, genreMatches.size());
+            Series selectedseries = genreMatches.get(seriesChoice - 1);
+            ui.displayMessage("Afspiller: " + selectedseries.getTitle());
+            playMenu(selectedseries.getTitle());
+            break;
+        }
+    }
+
+
+    public void top10Movies() {
+        loadedMovies.sort((m1, m2) -> Double.compare(m2.getRating(), m1.getRating()));
+        ui.displayMessage("Top 10 Film: ");
+
+        for (int i = 0; i < Math.min(10, loadedMovies.size()); i++) {
+            ui.displayMessage((i + 1) + ". " + loadedMovies.get(i).toString());
+        }
+
+        int choice = ui.promptNumber("Indtast nummeret på den film du vil afspille: ", 1, 10);
+
+        Movie selectedMovie = loadedMovies.get(choice - 1);
+        ui.displayMessage("Afspiller: " + selectedMovie.getTitle());
+        playMenu(selectedMovie.getTitle());
+    }
+
+    public void top10Series() {
+        loadedSeries.sort((s1, s2) -> Double.compare(s2.getRating(), s1.getRating()));
+        ui.displayMessage("Top 10 Serier: ");
+
+        for (int i = 0; i < Math.min(10, loadedSeries.size()); i++) {
+            ui.displayMessage((i + 1) + ". " + loadedSeries.get(i).toString());
+        }
+
+        int choice = ui.promptNumber("Indtast nummeret på den serie du vil afspille: ", 1, 10);
+
+        Series selectedSeries = loadedSeries.get(choice - 1);
+        ui.displayMessage("Afspiller: " + selectedSeries.getTitle());
+        playMenu(selectedSeries.getTitle());
+    }
+
+    public void titleSearch(String title) {
+
+        for (Movie movie : loadedMovies) {
+            if (movie.getTitle().equalsIgnoreCase(title)) {
+                ui.displayMessage("Fundet film: " + title);
+
+                if (ui.promptBinary("Vil du afspille " + title + "?: Y/N")) {
+                    ui.displayMessage("Afspiller: " + title);
+                    playMenu(title);
+                }
+                return;
+            }
+        }
+
+        for (Series series : loadedSeries) {
+            if (series.getTitle().equalsIgnoreCase(title)) {
+                ui.displayMessage("Fundet serie: " + title);
+
+                if (ui.promptBinary("Vil du afspille " + title + "?: Y/N")) {
+                    ui.displayMessage("Afspiller: " + title);
+                    playMenu(title);
+                }
+                return;
+            }
+        }
+    }
+
 
     public ArrayList<Movie> readMovie() {
         ArrayList<Movie> createdMovies = new ArrayList<>();
@@ -178,138 +288,35 @@ public class Search {
     public void playMenu(String title) {
         userDataHandler.addToWatched(title);
 
-        while (true) {
+        boolean playLoop = true;
+
+        while (playLoop) {
             String input = ui.promptText("1. Pause\n2. Tilbage til Hovedmenu");
 
-            if (input.equalsIgnoreCase("1")) {
+            if (input.equals("1")) {
                 ui.displayMessage(title + " er sat på pause");
+                boolean pauseLoop = true;
 
-                while (true) {
+                while (pauseLoop) {
                     String resumeInput = ui.promptText("1. Genoptag\n2. Tilbage til Hovedmenu");
 
-                    if (resumeInput.equalsIgnoreCase("1")) {
+                    if (resumeInput.equals("1")) {
                         ui.displayMessage(title + " er Genoptaget");
-                        playMenu(title);
                         break;
-                    } else if (resumeInput.equalsIgnoreCase("2")) {
+                    } else if (resumeInput.equals("2")) {
+                        pauseLoop = false;
                         searchMenu();
-                        break;
                     } else {
                         ui.displayMessage("Skriv et gyldigt tal. " + title + " er stadig på pause");
                     }
                 }
-                break;
-            } else if (input.equalsIgnoreCase("2")) {
+            } else if (input.equals("2")) {
+                playLoop = false;
                 searchMenu();
-                break;
             } else {
                 ui.displayMessage("Skriv et gyldigt tal. " + title + " afspiller stadig");
             }
         }
-    }
-
-    public void searchByGenreMovie() {
-        String inputGenre = ui.promptText(genreMsg);
-        boolean found = false;
-
-        int choice = ui.promptNumber("Indtast nummeret på den film du vil afspille: ", 1, 23);
-
-        Movie selectedMovie = loadedMovies.get(choice - 1);
-        ui.displayMessage("Afspiller: " + selectedMovie.getTitle());
-        playMenu(selectedMovie.getTitle());
-
-        ui.displayMessage("Film i genren: " + inputGenre);
-        for (Movie movie : loadedMovies) {
-            for (String genre : movie.getGenre()) {
-                if (genre.toLowerCase().trim().equals(inputGenre)) {
-                    System.out.println(movie);
-                    found = true;
-                    break;
-                }
-            }
-        }
-
-        if (!found) {
-            ui.displayMessage("Ingen film fundet i genren: " + inputGenre);
-        }
-    }
-
-    public void searchByGenreSeries() {
-        String inputGenre = ui.promptText(genreMsg);
-        boolean found = false;
-
-        ui.displayMessage("Serier i genren: " + inputGenre);
-        for (Series series : loadedSeries) {
-            for (String genre : series.getGenre()) {
-                if (genre.toLowerCase().trim().equals(inputGenre)) {
-                    System.out.println(series);
-                    found = true;
-                    break;
-                }
-            }
-        }
-
-        if (!found) {
-            ui.displayMessage("Ingen serier fundet i genren: " + inputGenre);
-        }
-    }
-
-    public void top10Movies() {
-        loadedMovies.sort((m1, m2) -> Double.compare(m2.getRating(), m1.getRating()));
-        ui.displayMessage("Top 10 Film: ");
-
-        for (int i = 0; i < Math.min(10, loadedMovies.size()); i++) {
-            ui.displayMessage((i + 1) + ". " + loadedMovies.get(i).toString());
-        }
-
-        int choice = ui.promptNumber("Indtast nummeret på den film du vil afspille: ", 1, 10);
-
-        Movie selectedMovie = loadedMovies.get(choice - 1);
-        ui.displayMessage("Afspiller: " + selectedMovie.getTitle());
-        playMenu(selectedMovie.getTitle());
-    }
-
-    public void top10Series() {
-        loadedSeries.sort((s1, s2) -> Double.compare(s2.getRating(), s1.getRating()));
-        ui.displayMessage("Top 10 Serier: ");
-
-        for (int i = 0; i < Math.min(10, loadedSeries.size()); i++) {
-            ui.displayMessage((i + 1) + ". " + loadedSeries.get(i).toString());
-        }
-
-        int choice = ui.promptNumber("Indtast nummeret på den serie du vil afspille: ", 1, 10);
-
-        Series selectedSeries = loadedSeries.get(choice - 1);
-        ui.displayMessage("Afspiller: " + selectedSeries.getTitle());
-        playMenu(selectedSeries.getTitle());
-    }
-
-    public void movieMenu(ArrayList<Movie> loadedMovies) {
-        ui.displayMessage("Vælg en film:");
-
-        for (int i = 0; i < loadedMovies.size(); i++) {
-            ui.displayMessage((i + 1) + ". " + loadedMovies.get(i).toString());
-        }
-
-        int choice = ui.promptNumber("Indtast nummeret på den film du vil afspille: ", 1, loadedMovies.size());
-
-        Movie selectedMovie = loadedMovies.get(choice - 1);
-        ui.displayMessage("Afspiller: " + selectedMovie.getTitle());
-        playMenu(selectedMovie.getTitle());
-    }
-
-    public void seriesMenu(ArrayList<Series> loadedSeries) {
-        ui.displayMessage("Vælg en serie:");
-
-        for (int i = 0; i < loadedSeries.size(); i++) {
-            ui.displayMessage((i + 1) + ". " + loadedSeries.get(i).toString());
-        }
-
-        int choice = ui.promptNumber("Indtast nummeret på den serie du vil afspille: ", 1, loadedSeries.size());
-
-        Series selectedSeries = loadedSeries.get(choice - 1);
-        ui.displayMessage("Afspiller: " + selectedSeries.getTitle());
-        playMenu(selectedSeries.getTitle());
     }
 
     public boolean titleExists(String title) {

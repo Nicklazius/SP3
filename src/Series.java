@@ -1,28 +1,11 @@
-import util.FileIO;
-
-import java.util.ArrayList;
-
-// En klasse der repræsenterer en serie
 public class Series extends Media {
 
-    // Konstruktor – det der sker, når vi laver et nyt Series-objekt
     public Series(String title, String runTime, String[] genre, double rating, int season, int episode) {
         super(title, 0, genre, rating, runTime, season, episode);
-
-        this.title = title;
-        this.runTime = runTime;
-        this.genre = genre;
-        this.rating = rating;
-        this.season = season;
-        this.episode = episode;
     }
 
     public String getTitle() {
         return title;
-    }
-
-    public String getRuntime() {
-        return runTime;
     }
 
     public String[] getGenre() {
@@ -35,7 +18,6 @@ public class Series extends Media {
 
     @Override
     public String toString() {
-
         return "Titel: " + title + "  Info om serien - RunTime: " + runTime + ", Genre: " + String.join(", ", genre) + ", Rating: " + rating;
     }
 }
