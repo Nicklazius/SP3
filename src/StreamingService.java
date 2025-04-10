@@ -2,28 +2,27 @@ import util.FileIO;
 import util.TextUI;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 
 public class StreamingService {
     private TextUI ui = new TextUI();
     private FileIO io = new FileIO();
 
-    private String StreamName;
+    private String streamName;
     private String password;
     private Account currentUser;
     private ArrayList<Account> account;
 
     public StreamingService(String name) {
 
-        this.StreamName = name;
+        this.streamName = name;
         this.account = new ArrayList<>();
     }
 
     public void startSession() {
         ArrayList<String> data = io.readData("data/account.csv");
 
-        ui.displayMessage("Velkommen til " + this.StreamName + "\nStartMenu:");
+        ui.displayMessage("Velkommen til " + this.streamName + "\nStartMenu:");
 
         String input = ui.promptText("1. Login\n2. Tilmeld dig");
         while (true) {
@@ -71,8 +70,26 @@ public class StreamingService {
 
     public void registerUser() {
 
-        String accName = ui.promptText("Vælg et brugernavn: ");
-        String accPassword = ui.promptText("Vælg et kodeord: ");
+        String accName;
+        while (true) {
+            accName = ui.promptText("Vælg et brugernavn:");
+
+            if (accName == null || accName.trim().isEmpty()) {
+                ui.displayMessage("Du kan ikke oprette et brugernavn som er tomt");
+            } else {
+                break;
+            }
+        }
+        String accPassword;
+        while (true) {
+            accPassword = ui.promptText("Vælg et password:\nDet skal minimum være 8 tegn.");
+
+            if (accPassword == null || accPassword.trim().isEmpty() || accPassword.length() < 8) {
+                ui.displayMessage("Du kan ikke oprette et password som er tomt og det skal være på minimum 8 tegn.");
+            } else {
+                break;
+            }
+        }
         boolean choice = ui.promptBinary("Vil du gemme brugeren? Y/N");
         if (choice) {
             this.createAccount(accName, accPassword);
