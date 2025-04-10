@@ -1,14 +1,14 @@
 import util.FileIO;
 import util.TextUI;
+import util.UserDataHandler;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
-
 
 public class Search {
     TextUI ui = new TextUI();
     FileIO io = new FileIO();
+    UserDataHandler userDataHandler = new UserDataHandler();
     Scanner sc = new Scanner(System.in);
 
     private ArrayList<String[]> moviesList = new ArrayList<>();
@@ -19,7 +19,6 @@ public class Search {
     private ArrayList<Movie> loadedMovies = readMovie();
 
     public Search() {
-
         loadMovieList();
         loadSeriesList();
     }
@@ -35,10 +34,13 @@ public class Search {
                 if (ui.promptBinary("Vil du afspille " + title + "?: Y/N")) {
                     ui.displayMessage("Afspiller: " + title);
                     playMenu(title);
-                } else {
-                    ui.displayMessage("Tilbage til Hovedmenu:");
-                    searchMenu();
+
+                    if (ui.promptBinary("Vil du gemme " + title + " som favorit?: Y/N")) {
+                        userDataHandler.addToSaved(title);
+                        ui.displayMessage(title + " blev gemt som favorit.");
+                    }
                 }
+                searchMenu();
                 break;
             }
         }
@@ -50,10 +52,13 @@ public class Search {
                 if (ui.promptBinary("Vil du afspille " + title + "?: Y/N")) {
                     ui.displayMessage("Afspiller: " + title);
                     playMenu(title);
-                } else {
-                    ui.displayMessage("Tilbage til Hovedmenu:");
-                    searchMenu();
+
+                    if (ui.promptBinary("Vil du gemme " + title + " som favorit?: Y/N")) {
+                        userDataHandler.addToSaved(title);
+                        ui.displayMessage(title + " blev gemt som favorit.");
+                    }
                 }
+                searchMenu();
                 break;
             }
         }
@@ -64,14 +69,13 @@ public class Search {
     }
 
     public void titles() {
-
         System.out.println("Indtast titel eller skriv ESC for at komme tilbage til Hovedmenu'en.");
 
         while (true) {
-            String title = sc.nextLine();;
+            String title = sc.nextLine();
 
             if (title == null || title.trim().isEmpty()) {
-                ui.displayMessage("Skriv et venligst en titel.");
+                ui.displayMessage("Skriv venligst en titel.");
             } else if (title.equalsIgnoreCase("esc")) {
                 searchMenu();
                 break;
@@ -84,78 +88,11 @@ public class Search {
         }
     }
 
-    public void series() {
-
-        ui.displayList(seriesData, "");
-    }
-
-    public void searchByGenreMovie() {
-        String inputGenre = ui.promptText("Indtast genre du vil søge efter (fx Drama, Comedy):").toLowerCase().trim();
-        boolean found = false;
-
-        ui.displayMessage("Film i genren: " + inputGenre);
-        for (Movie movie : loadedMovies) {
-            for (String genre : movie.getGenre()) {
-                if (genre.toLowerCase().trim().equals(inputGenre)) {
-                    System.out.println(movie);
-                    found = true;
-                    break;
-                }
-            }
-        }
-
-        if (!found) {
-            ui.displayMessage("Ingen film fundet i genren: " + inputGenre);
-        }
-    }
-
-    public void searchByGenreSeries(){
-        String inputGenre = ui.promptText("Indtast genre du vil søge efter (fx Drama, Comedy):").toLowerCase().trim();
-        boolean found = false;
-
-        ui.displayMessage("Serier i genren: " + inputGenre);
-        for (Series series : loadedSeries) {
-            for (String genre : series.getGenre()) {
-                if (genre.toLowerCase().trim().equals(inputGenre)) {
-                    System.out.println(series);
-                    found = true;
-                    break;
-                }
-            }
-        }
-
-        if (!found) {
-            ui.displayMessage("Ingen serier fundet i genren: " + inputGenre);
-        }
-    }
-
-    public void top10Series() {
-
-        loadedSeries.sort((s1, s2) -> Double.compare(s2.getRating(), s1.getRating()));
-        ui.displayMessage("Top 10 Serier: ");
-
-        for (int i = 0; i < Math.min(10, seriesList.size()); i++) {
-            ui.displayMessage(loadedSeries.get(i).toString());
-        }
-        searchMenu();
-    }
-
-    public void top10Movies() {
-
-        loadedMovies.sort((m1, m2) -> Double.compare(m2.getRating(), m1.getRating()));
-        ui.displayMessage("Top 10 Film: ");
-
-        for (int i = 0; i < Math.min(10, loadedMovies.size()); i++) {
-            ui.displayMessage(loadedMovies.get(i).toString());
-        }
-        searchMenu();
-    }
-
     public void searchMenu() {
 
         while (true) {
             ui.displayMessage("Hovedmenu: Vælg en mulighed:");
-            ui.displayMessage("1. Title Search\n2. All Movies\n3. Show All Series\n4. Genres\n5. Top10 Movies\n6. Top10 Series\n0. Logout");
+            ui.displayMessage("1. Title Search\n2. All Movies\n3. Show All Series\n4. Genres\n5. Top10 Movies\n6. Top10 Series\n8. Sete Film/Serier\n9. Gemte Film/Serier\n0. Logout");
             String input = sc.nextLine();
 
             switch (input) {
@@ -179,18 +116,23 @@ public class Search {
                     break;
                 case "7":
                     top10Series();
+                    break;
+                case "8":
+                    userDataHandler.showWatched(ui);
+                    break;
+                case "9":
+                    userDataHandler.showSaved(ui);
+                    break;
                 case "0":
                     System.out.println("Farvel :)");
-                    break;
+                    return;
                 default:
                     System.out.println("Skriv et gyldigt tal.");
             }
-            break;
         }
     }
 
     public ArrayList<Movie> readMovie() {
-
         ArrayList<Movie> createdMovies = new ArrayList<>();
 
         if (!moviesData.isEmpty()) {
@@ -206,7 +148,6 @@ public class Search {
     }
 
     public ArrayList<Series> readSeries() {
-
         ArrayList<Series> createdSeries = new ArrayList<>();
 
         if (!seriesData.isEmpty()) {
@@ -221,7 +162,6 @@ public class Search {
                     if (parts.length == 2) {
                         int season = Integer.parseInt(parts[0].trim());
                         int episode = Integer.parseInt(parts[1].trim());
-
                         createdSeries.add(new Series(values[0], values[1], genre, rating, season, episode));
                     }
                 }
@@ -231,6 +171,7 @@ public class Search {
     }
 
     public void playMenu(String title) {
+        userDataHandler.addToWatched(title);
 
         while (true) {
             String input = ui.promptText("1. Pause\n2. Tilbage til Hovedmenu");
@@ -262,32 +203,62 @@ public class Search {
         }
     }
 
-    public void loadMovieList() {
-        for (String s : moviesData) {
-            String[] values = s.split(";");
-            moviesList.add(values);
-        }
-    }
+    public void searchByGenreMovie() {
+        String inputGenre = ui.promptText("Indtast genre du vil søge efter (fx Drama, Comedy):").toLowerCase().trim();
+        boolean found = false;
 
-    public void loadSeriesList() {
-        for (String s : seriesData) {
-            String[] values = s.split(";");
-            seriesList.add(values);
-        }
-    }
-
-    public boolean titleExists(String title) {
+        ui.displayMessage("Film i genren: " + inputGenre);
         for (Movie movie : loadedMovies) {
-            if (movie.getTitle().equalsIgnoreCase(title)) {
-                return true;
+            for (String genre : movie.getGenre()) {
+                if (genre.toLowerCase().trim().equals(inputGenre)) {
+                    System.out.println(movie);
+                    found = true;
+                    break;
+                }
             }
         }
+
+        if (!found) {
+            ui.displayMessage("Ingen film fundet i genren: " + inputGenre);
+        }
+    }
+
+    public void searchByGenreSeries() {
+        String inputGenre = ui.promptText("Indtast genre du vil søge efter (fx Drama, Comedy):").toLowerCase().trim();
+        boolean found = false;
+
+        ui.displayMessage("Serier i genren: " + inputGenre);
         for (Series series : loadedSeries) {
-            if (series.getTitle().equalsIgnoreCase(title)) {
-                return true;
+            for (String genre : series.getGenre()) {
+                if (genre.toLowerCase().trim().equals(inputGenre)) {
+                    System.out.println(series);
+                    found = true;
+                    break;
+                }
             }
         }
-        return false;
+
+        if (!found) {
+            ui.displayMessage("Ingen serier fundet i genren: " + inputGenre);
+        }
+    }
+
+    public void top10Movies() {
+        loadedMovies.sort((m1, m2) -> Double.compare(m2.getRating(), m1.getRating()));
+        ui.displayMessage("Top 10 Film: ");
+
+        for (int i = 0; i < Math.min(10, loadedMovies.size()); i++) {
+            ui.displayMessage(loadedMovies.get(i).toString());
+        }
+    }
+
+    public void top10Series() {
+        loadedSeries.sort((s1, s2) -> Double.compare(s2.getRating(), s1.getRating()));
+        ui.displayMessage("Top 10 Serier: ");
+
+        for (int i = 0; i < Math.min(10, loadedSeries.size()); i++) {
+            ui.displayMessage(loadedSeries.get(i).toString());
+        }
     }
 
     public void movieMenu(ArrayList<Movie> loadedMovies) {
@@ -318,4 +289,31 @@ public class Search {
         playMenu(selectedSeries.getTitle());
     }
 
+    public boolean titleExists(String title) {
+        for (Movie movie : loadedMovies) {
+            if (movie.getTitle().equalsIgnoreCase(title)) {
+                return true;
+            }
+        }
+        for (Series series : loadedSeries) {
+            if (series.getTitle().equalsIgnoreCase(title)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void loadMovieList() {
+        for (String s : moviesData) {
+            String[] values = s.split(";");
+            moviesList.add(values);
+        }
+    }
+
+    public void loadSeriesList() {
+        for (String s : seriesData) {
+            String[] values = s.split(";");
+            seriesList.add(values);
+        }
+    }
 }
