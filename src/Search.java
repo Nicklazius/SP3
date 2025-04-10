@@ -89,33 +89,6 @@ public class Search {
         ui.displayList(seriesData, "");
     }
 
-    public void genres() {
-
-        ArrayList<String> allGenres = new ArrayList<>();
-
-        for (String[] movie : moviesList) {
-            String[] genres = movie[2].split(",");
-            for (String genre : genres) {
-                genre = genre.trim();
-                if (!allGenres.contains(genre)) {
-                    allGenres.add(genre);
-                }
-            }
-        }
-
-        for (String[] serie : seriesList) {
-            String[] genres = serie[2].split(",");
-            for (String genre : genres) {
-                genre = genre.trim();
-                if (!allGenres.contains(genre)) {
-                    allGenres.add(genre);
-                }
-            }
-        }
-
-        ui.displayMessage("Alle genrer: " + allGenres);
-    }
-
     public void searchByGenreMovie() {
         String inputGenre = ui.promptText("Indtast genre du vil søge efter (fx Drama, Comedy):").toLowerCase().trim();
         boolean found = false;
